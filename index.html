@@ -3,26 +3,35 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <title>ToDo List</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
 </head>
 <body>
   <main>
     <div id="app">
       <h1>Board de tarefas</h1>
       <div id="form">
-        <form action="">
-          <input type="text" placeholder="Nome da tarefa">
-          <input type="text" placeholder="Etiqueta">
+        <form action="" method="post">
+          <input type="text" id="task" name="task" placeholder="Nome da tarefa" required>
+          <input type="text" id="taskTag" name="taskTag" placeholder="Etiqueta" required>
           <button>+</button>
         </form>
       </div>
       <div id="list">
-        <ul>
-          <li>
+        <ul id="listContents">
+          <li class="listLine">
             <p>Implementar tela de listagem de tarefas</p>
             <span>frontend</span>
             <span>Criado em: 21/08/2024</span>
             <button>Concluir</button>
+          </li>
+          <li class="listLine">
+            <p>Implementar protótipo da listagem de tarefas</p>
+            <span>UX</span>
+            <span>Criado em: 21/08/2024</span>
+            <i><img src="./assets/checkIcon.png" alt="Icone de concluido" class="check"></i>
           </li>
         </ul>  
       </div>
