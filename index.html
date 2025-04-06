@@ -12,33 +12,39 @@
 <body>
   <main>
     <div id="app">
-      <h1>Board de tarefas</h1>
-      <div id="form">
-        <form action="" method="post">
-          <input type="text" id="task" name="task" placeholder="Nome da tarefa" required>
-          <input type="text" id="taskTag" name="taskTag" placeholder="Etiqueta" required>
-          <button>+</button>
-        </form>
+      <div id="todo">
+        <h1>Board de tarefas</h1>
+        <div id="form">
+          <form action="" method="post">
+            <input type="text" class="task" name="task" placeholder="Nome da tarefa" required>
+            <input type="text" class="task" name="taskTag" placeholder="Etiqueta" required>
+            <button class="button">+</button>
+          </form>
+        </div>
+        <div id="list">
+          <ul id="listContents">
+            <li class="listLine">
+              <div class="listText">
+                <p>Implementar tela de listagem de tarefas</p>
+                <span class="tag">frontend</span>
+                <span>Criado em: 21/08/2024</span>
+              </div>
+              <button class="button">Concluir</button>
+            </li>
+            <li class="listLine">
+              <div class="listText" id="complete">
+                <p>Implementar protótipo da listagem de tarefas</p>
+                <span class="tag">UX</span>
+                <span>Criado em: 21/08/2024</span>
+              </div>
+              <div id="check">
+                <img src="./assets/checkIcon.png" alt="Icone de concluido" id="checkImg">
+              </div>
+            </li>
+          </ul>  
+        </div>
+        <div id="count"> 1 tarefa concluida</div>
       </div>
-      <div id="list">
-        <ul id="listContents">
-          <li class="listLine">
-            <p>Implementar tela de listagem de tarefas</p>
-            <span>frontend</span>
-            <span>Criado em: 21/08/2024</span>
-            <button>Concluir</button>
-          </li>
-          <li class="listLine">
-            <p>Implementar protótipo da listagem de tarefas</p>
-            <span>UX</span>
-            <span>Criado em: 21/08/2024</span>
-            <div id="check">
-              <img src="./assets/checkIcon.png" alt="Icone de concluido" id="checkImg">
-            </div>
-          </li>
-        </ul>  
-      </div>
-      <span>1 tarefa concluida</span>
     </div>
   </main>
 </body>

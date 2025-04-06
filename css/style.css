@@ -1,9 +1,11 @@
 :root{
-  --primary-color: ;
-  --button-color: ;
-  --text-color: ;
+  --primary-color:#F5F9FF;
+  --button-color: #2D70FD;
+  --button-text:#FFF;
+  --text-color:#001747 ;
   --font-primary:"Rubik", sans-serif;
-  --font-secondary:"Inter", sans-serif;;
+  --font-secondary:"Inter", sans-serif;
+  --border-color:#EEEEEE;
 }
 
 *{
@@ -11,9 +13,119 @@
   padding: 0;
   box-sizing: border-box;
   font-size: 10px;
+  font-family: var(--font-secondary)
+}
+ 
+main{
+  width: 100vw;
+  height: 100vh;
+}
+
+h1{
+  font-size: 4rem;
+  color: #11175E;
   font-family: var(--font-primary)
 }
 
+#app{
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--primary-color);
+}
+
+#todo{
+  padding: 2.5rem 3.5rem;
+  background-color: #FFF;
+  border-radius: 16px;
+}
+
+#form{
+  margin: 2rem 0;
+}
+
+#form :first-child , #form :nth-child(2){
+  margin-right: .5rem;
+}
+
+.task{
+  padding: 1rem 2rem;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  color: #B1BACB;
+  font-family: var(--font-primary);
+
+  &:focus{
+    outline:2px solid rgb(152, 135, 252)
+  }
+}
+
+.task::placeholder{
+  color: #B1BACB;
+  font-family: var(--font-primary)
+}
+
+.button{
+  background-color: var(--button-color);
+  color: var(--button-text);
+  border: none;
+  padding: 1rem;
+  border-radius: 4px;
+  font-weight: 500;
+
+  &:hover{
+    cursor: pointer;
+    opacity: 0.8;
+  }
+}
+
+#list{
+  border-bottom: 1px solid var(--border-color);
+  margin: 2rem 0;
+}
+
+.listLine{
+  padding: 2rem;
+  list-style: none;
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  margin-bottom: .8rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.listText p{
+  color: #001747;
+  margin-bottom: 1.3rem;
+  font-weight: 500;
+}
+
+.listText span{
+  color: #B1BACB;
+  font-weight: 500;
+}
+
+.tag{
+  border: 1px solid var(--border-color);
+  padding: .4rem .6rem;
+  border-radius: 16px;
+  margin-right: .6rem;
+}
+
+#complete p{
+  color: #8F98A8;
+  text-decoration: line-through;
+}
+
 #checkImg{
-  width: 50px;
+  width: 4rem;
+}
+
+#count{
+  text-align: right;
+  color: #B1BACB;
+  font-weight: 400;
 }
