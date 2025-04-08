@@ -1,27 +1,97 @@
-@media only screen and (max-width: 767px) {
-  h1{
+@media (max-width: 768px) {
+  #app {
+    justify-content: flex-start;
+    padding-top: 2rem;
+  }
+
+  h1 {
     font-size: 2.5rem;
     text-align: center;
+    padding: 0 1rem;
   }
 
-  #todo{
-    width: 80vw;
-    padding: 1rem;
+  #todo {
+    padding: 2rem;
+    width: 90%;
+    border-radius: 12px;
   }
 
-  #form{
-    margin: 1rem;
-  }
-
-  #form form{ 
-    display: flex;
+  #contentForm {
     flex-direction: column;
-    gap: 16px;
+    display: flex;
+    gap: 1rem;
   }
 
-  .listLine{
-    display: flex;
+  #contentForm :first-child,
+  #form :nth-child(2) {
+    margin-right: 0;
+    margin-bottom:.7rem;
+    width: 100%;
+  }
+
+  .task {
+    padding: 0.8rem 1rem;
+    font-size: 1rem;
+  }
+
+  .button {
+    padding: 0.8rem;
+    font-size: 1rem;
+    width: 100%;
+  }
+
+  .listLine {
     flex-direction: column;
-    gap: 16px;
+    align-items: flex-start;
+    padding: 1.5rem;
+  }
+
+  .listText p {
+    font-size: 1rem;
+  }
+
+  .listText span {
+    font-size: 0.9rem;
+  }
+
+  .tag {
+    margin-top: 0.5rem;
+  }
+
+  .checkImg {
+    width: 3rem;
+    align-self: flex-end;
+  }
+
+  #count {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  h1 {
+    font-size: 2rem;
+  }
+
+  #todo {
+    padding: 1.5rem;
+  }
+
+  .task {
+    font-size: 0.95rem;
+  }
+
+  .button {
+    font-size: 0.95rem;
+  }
+
+  .listLine {
+    padding: 1.2rem;
+  }
+
+  .checkImg {
+    width: 2.5rem;
   }
 }
