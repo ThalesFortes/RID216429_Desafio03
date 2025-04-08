@@ -1,4 +1,3 @@
-const tasks = []
 const getTasksStorage = () => {
   if (localStorage.getItem('tasks') === "undefined") {
     localStorage.removeItem('tasks');
