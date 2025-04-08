@@ -1,18 +1,64 @@
-const list = [
-  {id:1 , task:"Implementar tela de listagem de tarefas" , tag:"frontend", create:new Date(), conclude: false},
-  {id:2 , task:"Implementar protótipo da listagem de tarefas" , tag:"ux", create:new Date(), conclude: false}
-]
+const getTasksStorage = () =>{
+  const localTasks = JSON.parse(window.localStorage.getItem('tasks'))
+  return localTasks ? localTasks : []
+}
 
-const createButtonConclude = (lists) => {
+const setTasksInLocalStorage = (tasks) =>{
+  window.localStorage.setItem('tasks',JSON.stringify(tasks))
+}
+
+const returnButtonConclude = (event) => {
+  const [, taskID] = event.target.id.split('-'); 
+  const check = event.target
+  const wrapper = check.parentElement;
+  const divPendent = wrapper.querySelector('.listText')
+ // tasks[taskID-1].conclude = false
+
+  //console.log(list)
+  divPendent.id = ''
+  const buttonNew = createButtonConclude(taskID)
+  wrapper.replaceChild(buttonNew,check)
+}
+
+
+const checkTaskImage = (event) => {
+  const [,taskID] = event.target.id.split('-')
+  const button = event.target
+  const wrapper = button.parentElement;
+  const divPendent = wrapper.querySelector('.listText');
+
+  // Troca o estilo
+  divPendent.id = 'complete';
+
+  const check = document.createElement('img');
+  check.src = '../assets/checkIcon.png';
+  check.alt = 'Ícone de tarefa concluída';
+  check.className = 'checkImg'
+  check.id = `taskID-${taskID}`
+
+  //tasks[taskID-1].conclude = true
+
+  //console.log(list)
+  check.addEventListener('click', returnButtonConclude)
+  // Substitui o botão pela imagem
+  wrapper.replaceChild(check, button);
   
+};
+
+
+const createButtonConclude = (taskID) => {
   const button = document.createElement('button')
   button.className = 'button'
   button.textContent = 'Concluir'
+  button.id = `taskID-${taskID}`
+  button.addEventListener('click', checkTaskImage)
   
   return button
 }
 
-const createTask = (list) =>{
+const createTask = () =>{
+  const tasks = getTasksStorage();
+  
   const taskList = document.getElementById('listContents')
   const wrapper = document.createElement('li')
   wrapper.className ='listLine'
@@ -21,17 +67,17 @@ const createTask = (list) =>{
   div.className = 'listText'
 
   const description = document.createElement('p')
-  description.textContent = list.task
+  description.textContent = tasks.task
 
   const tag = document.createElement('span')
-  tag.textContent = list.tag
+  tag.textContent = tasks.tag
   tag.className = "tag"
 
   const date = document.createElement('span')
-  tag.textContent = list.tag
-  date.textContent = `Criado em ${dateFormat}`
+  date.textContent = `Criado em ${tasks.create}`
 
-  const dateFormat = list.create.toLocaleString('pt-BR');
+  const button = createButtonConclude(tasks.id)
+  console.log(button.id)
 
   div.appendChild(description)
   div.appendChild(tag)
@@ -40,14 +86,60 @@ const createTask = (list) =>{
   wrapper.appendChild(div)
   wrapper.appendChild(button)
 
-  taskList .appendChild(wrapper)
+  taskList.appendChild(wrapper)
 
   return wrapper;
 }
 
-window.onload = function(){
+const newTaskId = () =>{
+  const tasks = getTasksStorage();
+  const lastID = tasks[tasks.length - 1]?.id
+  return lastID ? lastID + 1 : 1
+}
 
-  list.forEach((x) =>{ 
+const createNewTask = (event) =>{
+   event.preventDefault();
+   
+   const id = newTaskId()
+   const task = event.target.task.value
+   const tag = event.target.taskTag.value
+   const date = new Date().toLocaleString('pt-BR');
+   const conclude = false
+
+   const newTask = {
+    id:id,
+    task:task,
+    tag:tag,
+    create:date,
+    conclude:conclude
+   }
+
+   const currentTasks = getTasksStorage();
+   currentTasks.push(newTask)
+   setTasksInLocalStorage(currentTasks)
+   createTask(newTask)
+}
+
+const removeTask = () => {
+  const ta = document.getElementById('remove');
+  ta.addEventListener('click', () => {
+    setTasksInLocalStorage([]); // limpa o localStorage
+    const taskList = document.getElementById('listContents');
+    taskList.innerHTML = ''; // remove todos os elementos da lista no DOM
+    console.log('CLIQUE');
+  });
+};
+
+
+
+window.onload = function(){
+  const tasks = getTasksStorage();
+  form.addEventListener('submit', createNewTask)
+
+
+  tasks.forEach((x) =>{ 
     createTask(x)
   }) 
+
+  removeTask();
 }
