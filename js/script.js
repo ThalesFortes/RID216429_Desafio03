@@ -16,9 +16,19 @@ const getTasksStorage = () => {
   }
 }
 
-
 const setTasksInLocalStorage = (tasks) =>{
   window.localStorage.setItem('tasks',JSON.stringify(tasks))
+}
+
+const updateStatus = (taskID, status) =>{
+  const tasks = getTasksStorage();
+  const updateTasks = tasks.map((task) => { 
+    if(Number(task.id) === Number(taskID)) {
+      return {...task, conclude:status}
+    }
+    return task
+  })
+  setTasksInLocalStorage(updateTasks)
 }
 
 const returnButtonConclude = (event) => {
@@ -26,20 +36,23 @@ const returnButtonConclude = (event) => {
   const check = event.target
   const wrapper = check.parentElement;
   const divPendent = wrapper.querySelector('.listText')
- // tasks[taskID-1].conclude = false
+  updateStatus(taskID, false)
 
   //console.log(list)
   divPendent.id = ''
   const buttonNew = createButtonConclude(taskID)
   wrapper.replaceChild(buttonNew,check)
-}
+  wrapper.setAttribute('data-conclude', 'false');
 
+}
 
 const checkTaskImage = (event) => {
   const [,taskID] = event.target.id.split('-')
   const button = event.target
   const wrapper = button.parentElement;
   const divPendent = wrapper.querySelector('.listText');
+  wrapper.setAttribute('data-conclude', 'true');
+
 
   // Troca o estilo
   divPendent.id = 'complete';
@@ -50,7 +63,7 @@ const checkTaskImage = (event) => {
   check.className = 'checkImg'
   check.id = `taskID-${taskID}`
 
-  //tasks[taskID-1].conclude = true
+  updateStatus(taskID, true)
 
   //console.log(list)
   check.addEventListener('click', returnButtonConclude)
@@ -74,9 +87,12 @@ const createTask = (tasks) =>{
   const taskList = document.getElementById('listContents')
   const wrapper = document.createElement('li')
   wrapper.className ='listLine'
+  wrapper.setAttribute('data-id', tasks.id)
+  wrapper.setAttribute('data-conclude', tasks.conclude)
 
   const div = document.createElement('div')
   div.className = 'listText'
+
 
   const description = document.createElement('p')
   description.textContent = tasks.task
@@ -105,7 +121,7 @@ const createTask = (tasks) =>{
 
 const newTaskId = () =>{
   const tasks = getTasksStorage();
-  const lastID = tasks[tasks.length - 1]?.id
+  const lastID = tasks[tasks.length - 1] ?.id
   return lastID ? lastID + 1 : 1
 }
 
@@ -132,14 +148,30 @@ const createNewTask = (event) =>{
    createTask(newTask)
 }
 
+const deleteTasks = () => {
+  const tasks = getTasksStorage();
+  const updateTasks = tasks.filter((task) => {return task.conclude === false})
+  setTasksInLocalStorage(updateTasks)                          
+}
+
+
+const removeHtmlList = () => {
+  const taskList = document.querySelectorAll('.listLine');
+  taskList.forEach((el) => {
+    const isConclude = el.getAttribute('data-conclude');
+    if (isConclude === 'true') {
+      el.remove(); 
+    }
+  });
+
+}
+
 
 const removeTask = () => {
   const removeButton = document.getElementById('remove');
   removeButton.addEventListener('click', () => {
-    setTasksInLocalStorage([]); 
-    const taskList = document.getElementById('listContents');
-    taskList.innerHTML = ''; 
-    console.log('CLIQUE');
+    deleteTasks()
+    removeHtmlList()
   });
 };
 
