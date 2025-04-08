@@ -1,4 +1,4 @@
-# TODO-LIST COM DRAGON
+# TODO-LIST COM DRAG OPERATIONS
 
 - ToDo-list Responsivo uma aplicação em HTML, CSS e JavaScript que cria,apaga,marca como concluida todas as tarefas e a salvam no local storage
 - ler e cria a lista, altera estado e deleta com um CRUD
