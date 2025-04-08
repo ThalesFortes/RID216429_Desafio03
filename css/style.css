@@ -88,6 +88,11 @@ h2{
   margin-right: .5rem;
 }
 
+#save-button:disabled{
+  background-color: #d9d9d9;
+  cursor: not-allowed;
+}
+
 .task{
   padding: 1rem 2rem;
   border: 1px solid var(--border-color);

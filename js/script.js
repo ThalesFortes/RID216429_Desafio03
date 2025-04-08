@@ -23,7 +23,21 @@ const updateStatus = (taskID, status) => {
     Number(task.id) === Number(taskID) ? { ...task, conclude: status } : task
   );
   setTasksInLocalStorage(updatedTasks);
-  renderAllTasks(); // atualiza interface
+
+  const taskElement = document.querySelector(`[data-id="${taskID}"]`);
+  if (!taskElement) return;
+
+  const targetList = status
+    ? document.getElementById("listConcludes")
+    : document.getElementById("listPendents");
+
+  const updatedTask = updatedTasks.find((t) => Number(t.id) === Number(taskID));
+  const newElement = createTask(updatedTask);
+
+  taskElement.parentElement.removeChild(taskElement);
+  targetList.appendChild(newElement);
+
+  createCount();
 };
 
 
@@ -31,7 +45,7 @@ const updateStatus = (taskID, status) => {
 const countTasks = () => {
   const task = getTasksStorage()
   const complete = task.filter((task) => task.conclude === true)
-  const pendent = task.filter((x) => x.conclude === false)
+  const pendent = task
   return {complete, pendent}
 }
 
@@ -118,28 +132,51 @@ const newTaskId = () => {
   return lastID ? lastID + 1 : 1;
 };
 
-// Cria nova tarefa e salva no localStorage
-const createNewTask = (event) => {
+// Simula envio para banco de dados (retorna uma promise)
+const sendTaskToDatabase = (task) => {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      console.log("Tarefa enviada ao banco:", task);
+      resolve({ status: 200, data: task }); 
+    }, 3000); 
+  });
+};
+
+// Cria nova tarefa e salva no localStorage (de forma assíncrona)
+const createNewTask = async (event) => {
   event.preventDefault();
 
-  const taskInput =  event.target.task;
+  const taskInput = event.target.task;
   const tagInput = event.target.taskTag;
 
   const id = newTaskId();
-  const task = taskInput.value
-  const tag = tagInput.value
+  const task = taskInput.value;
+  const tag = tagInput.value;
   const date = new Date().toLocaleString('pt-BR');
   const conclude = false;
 
   const newTask = { id, task, tag, create: date, conclude };
 
-  const tasks = getTasksStorage();
-  tasks.push(newTask);
-  setTasksInLocalStorage(tasks);
-  renderAllTasks();
-  clearInputs(taskInput,tagInput);
-};
+  try {
+    document.getElementById('save-button').setAttribute('disabled',true)
+    const response = await sendTaskToDatabase(newTask);
 
+    if (response.status === 200) {
+      const tasks = getTasksStorage();
+      tasks.push(response.data);
+      setTasksInLocalStorage(tasks);
+
+      const newElement = createTask(response.data);
+      document.getElementById("listPendents").appendChild(newElement);
+      createCount();
+      clearInputs(taskInput, tagInput);
+    }
+  } catch (error) {
+    console.error("Erro ao enviar tarefa:", error);
+    alert("Erro ao salvar tarefa. Tente novamente.");
+  }
+  document.getElementById('save-button').removeAttribute('disabled')
+};
 
 //Limpa os inputs
 const clearInputs = (...inputs) => {
@@ -149,10 +186,24 @@ const clearInputs = (...inputs) => {
 
 // Remove apenas as tarefas concluídas
 const deleteTasks = () => {
-  const tasks = getTasksStorage().filter((t) => !t.conclude);
-  setTasksInLocalStorage(tasks);
-  renderAllTasks();
+  const tasks = getTasksStorage();
+
+  const tasksToRemove = tasks
+    .filter(task => task.conclude)
+    .map(task => task.id);
+
+  const updatedTasks = tasks.filter(task => !task.conclude);
+  setTasksInLocalStorage(updatedTasks);
+
+  tasksToRemove.forEach(id => {
+    const li = document.querySelector(`[data-id="${id}"]`);
+    if (li) {
+      li.parentElement.removeChild(li);
+    }
+  });
+  createCount();
 };
+
 
 // Quando uma tarefa é solta em uma das listas (drop)
 const handleDrop = (event, targetStatus) => {
@@ -165,8 +216,19 @@ const handleDrop = (event, targetStatus) => {
 
   task.conclude = targetStatus;
   setTasksInLocalStorage(tasks);
-  renderAllTasks();
+  
+  const oldElement = document.querySelector(`[data-id="${id}"]`);
+  const newElement = createTask(task);
+
+  if (oldElement) oldElement.parentElement.removeChild(oldElement);
+  const targetList = targetStatus
+    ? document.getElementById("listConcludes")
+    : document.getElementById("listPendents");
+  targetList.appendChild(newElement);
+
+  createCount();
 };
+
 
 // Renderiza todas as tarefas divididas por listas
 const renderAllTasks = () => {
