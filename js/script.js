@@ -1,191 +1,187 @@
+// Recupera tarefas do localStorage
 const getTasksStorage = () => {
-  if (localStorage.getItem('tasks') === "undefined") {
-    localStorage.removeItem('tasks');
-  }
-
-  const item = window.localStorage.getItem('tasks');
-  if (!item || item === "undefined") {
-    return [];
-  }
+  const data = window.localStorage.getItem('tasks');
+  if (!data || data === "undefined") return [];
   
   try {
-    return JSON.parse(item);
+    return JSON.parse(data);
   } catch (e) {
     console.error("Erro ao fazer parse do localStorage:", e);
     return [];
   }
-}
+};
 
-const setTasksInLocalStorage = (tasks) =>{
-  window.localStorage.setItem('tasks',JSON.stringify(tasks))
-}
+// Salva tarefas no localStorage
+const setTasksInLocalStorage = (tasks) => {
+  window.localStorage.setItem('tasks', JSON.stringify(tasks));
+};
 
-const updateStatus = (taskID, status) =>{
+// Atualiza o status (concluída ou não) de uma tarefa
+const updateStatus = (taskID, status) => {
   const tasks = getTasksStorage();
-  const updateTasks = tasks.map((task) => { 
-    if(Number(task.id) === Number(taskID)) {
-      return {...task, conclude:status}
-    }
-    return task
-  })
-  setTasksInLocalStorage(updateTasks)
-}
-
-const returnButtonConclude = (event) => {
-  const [, taskID] = event.target.id.split('-'); 
-  const check = event.target
-  const wrapper = check.parentElement;
-  const divPendent = wrapper.querySelector('.listText')
-  updateStatus(taskID, false)
-
-  //console.log(list)
-  divPendent.id = ''
-  const buttonNew = createButtonConclude(taskID)
-  wrapper.replaceChild(buttonNew,check)
-  wrapper.setAttribute('data-conclude', 'false');
-
-}
-
-const checkTaskImage = (event) => {
-  const [,taskID] = event.target.id.split('-')
-  const button = event.target
-  const wrapper = button.parentElement;
-  const divPendent = wrapper.querySelector('.listText');
-  wrapper.setAttribute('data-conclude', 'true');
-
-
-  // Troca o estilo
-  divPendent.id = 'complete';
-
-  const check = document.createElement('img');
-  check.src = '../assets/checkIcon.png';
-  check.alt = 'Ícone de tarefa concluída';
-  check.className = 'checkImg'
-  check.id = `taskID-${taskID}`
-
-  updateStatus(taskID, true)
-
-  //console.log(list)
-  check.addEventListener('click', returnButtonConclude)
-  // Substitui o botão pela imagem
-  wrapper.replaceChild(check, button);
-  
+  const updatedTasks = tasks.map((task) =>
+    Number(task.id) === Number(taskID) ? { ...task, conclude: status } : task
+  );
+  setTasksInLocalStorage(updatedTasks);
+  renderAllTasks(); // atualiza interface
 };
 
 
-const createButtonConclude = (taskID) => {
-  const button = document.createElement('button')
-  button.className = 'button'
-  button.textContent = 'Concluir'
-  button.id = `taskID-${taskID}`
-  button.addEventListener('click', checkTaskImage)
-  
-  return button
+//Contabiliza tarefas concluidas e pendentes
+const countTasks = () => {
+  const task = getTasksStorage()
+  const complete = task.filter((task) => task.conclude === true)
+  const pendent = task.filter((x) => x.conclude === false)
+  return {complete, pendent}
 }
 
-const createTask = (tasks) =>{
-  const taskList = document.getElementById('listContents')
-  const wrapper = document.createElement('li')
-  wrapper.className ='listLine'
-  wrapper.setAttribute('data-id', tasks.id)
-  wrapper.setAttribute('data-conclude', tasks.conclude)
 
-  const div = document.createElement('div')
-  div.className = 'listText'
+//Cria contador de tarefas concluidas e pendentes
+const createCount = () =>{
+  const count = document.getElementById('counterAndRemove')
+  count.innerHTML = "";
 
+  const span = document.createElement('span')
+  const {complete,pendent} = countTasks()
+  span.textContent = `${complete.length} / ${pendent.length}`
+  count.appendChild(span)
 
-  const description = document.createElement('p')
-  description.textContent = tasks.task
-
-  const tag = document.createElement('span')
-  tag.textContent = tasks.tag
-  tag.className = "tag"
-
-  const date = document.createElement('span')
-  date.textContent = `Criado em ${tasks.create}`
-
-  const button = createButtonConclude(tasks.id)
-  console.log(button.id)
-
-  div.appendChild(description)
-  div.appendChild(tag)
-  div.appendChild(date)
-
-  wrapper.appendChild(div)
-  wrapper.appendChild(button)
-
-  taskList.appendChild(wrapper)
-
-  return wrapper;
+  return count
 }
 
-const newTaskId = () =>{
+// Cria o botão de tarefa pendente
+const createButtonConclude = (id) => {
+  const button = document.createElement('button');
+  button.className = 'button';
+  button.textContent = 'Concluir';
+  button.id = `taskID-${id}`;
+  button.addEventListener('click', () => updateStatus(id, true));
+  return button;
+};
+
+// Cria o ícone de tarefa concluída
+const createCheckImage = (id) => {
+  const img = document.createElement('img');
+  img.src = '../assets/checkIcon.png';
+  img.alt = 'Ícone de tarefa concluída';
+  img.className = 'checkImg';
+  img.id = `taskID-${id}`;
+  img.addEventListener('click', () => updateStatus(id, false));
+  return img;
+};
+
+// Cria a <li> da tarefa
+const createTask = (task) => {
+  const li = document.createElement('li');
+  li.className = 'listLine';
+  li.setAttribute("draggable", "true");
+  li.setAttribute('data-id', task.id);
+  li.setAttribute('data-conclude', task.conclude);
+  li.addEventListener("dragstart", (event) => {
+    event.dataTransfer.setData("text/plain", task.id);
+    li.classList.add("dragging")
+  });
+  li.addEventListener("dragend", () => {
+    li.classList.remove("dragging");
+  });
+
+  const div = document.createElement('div');
+  div.className = 'listText';
+  if (task.conclude) div.id = "complete";
+
+  const p = document.createElement('p');
+  p.textContent = task.task;
+
+  const tag = document.createElement('span');
+  tag.className = 'tag';
+  tag.textContent = task.tag;
+
+  const date = document.createElement('span');
+  date.textContent = `Criado em ${task.create}`;
+
+  const action = task.conclude ? createCheckImage(task.id) : createButtonConclude(task.id);
+
+  div.appendChild(p);
+  div.appendChild(tag);
+  div.appendChild(date);
+
+  li.appendChild(div);
+  li.appendChild(action);
+
+  return li;
+};
+
+// Gera um novo ID baseado no último
+const newTaskId = () => {
   const tasks = getTasksStorage();
-  const lastID = tasks[tasks.length - 1] ?.id
-  return lastID ? lastID + 1 : 1
-}
+  const lastID = tasks[tasks.length - 1]?.id;
+  return lastID ? lastID + 1 : 1;
+};
 
-const createNewTask = (event) =>{
-   event.preventDefault();
-   
-   const id = newTaskId()
-   const task = event.target.task.value
-   const tag = event.target.taskTag.value
-   const date = new Date().toLocaleString('pt-BR');
-   const conclude = false
+// Cria nova tarefa e salva no localStorage
+const createNewTask = (event) => {
+  event.preventDefault();
 
-   const newTask = {
-    id:id,
-    task:task,
-    tag:tag,
-    create:date,
-    conclude:conclude
-   }
+  const id = newTaskId();
+  const task = event.target.task.value;
+  const tag = event.target.taskTag.value;
+  const date = new Date().toLocaleString('pt-BR');
+  const conclude = false;
 
-   const currentTasks = getTasksStorage();
-   currentTasks.push(newTask)
-   setTasksInLocalStorage(currentTasks)
-   createTask(newTask)
-}
+  const newTask = { id, task, tag, create: date, conclude };
 
+  const tasks = getTasksStorage();
+  tasks.push(newTask);
+  setTasksInLocalStorage(tasks);
+
+  renderAllTasks();
+};
+
+// Remove apenas as tarefas concluídas
 const deleteTasks = () => {
+  const tasks = getTasksStorage().filter((t) => !t.conclude);
+  setTasksInLocalStorage(tasks);
+  renderAllTasks();
+};
+
+// Quando uma tarefa é solta em uma das listas (drop)
+const handleDrop = (event, targetStatus) => {
+  event.preventDefault();
+  const id = Number(event.dataTransfer.getData("text/plain"));
+
   const tasks = getTasksStorage();
-  const updateTasks = tasks.filter((task) => {return task.conclude === false})
-  setTasksInLocalStorage(updateTasks)                          
-}
+  const task = tasks.find((t) => t.id === id);
+  if (!task || task.conclude === targetStatus) return;
 
+  task.conclude = targetStatus;
+  setTasksInLocalStorage(tasks);
+  renderAllTasks();
+};
 
-const removeHtmlList = () => {
-  const taskList = document.querySelectorAll('.listLine');
-  taskList.forEach((el) => {
-    const isConclude = el.getAttribute('data-conclude');
-    if (isConclude === 'true') {
-      el.remove(); 
-    }
+// Renderiza todas as tarefas divididas por listas
+const renderAllTasks = () => {
+  const pendents = document.getElementById("listPendents");
+  const concludes = document.getElementById("listConcludes");
+
+  pendents.innerHTML = "";
+  concludes.innerHTML = "";
+
+  const tasks = getTasksStorage();
+  tasks.forEach((task) => {
+    const element = createTask(task);
+    if (task.conclude){
+      concludes.appendChild(element)
+    } else{
+       pendents.appendChild(element);
+    }    
   });
-
-}
-
-
-const removeTask = () => {
-  const removeButton = document.getElementById('remove');
-  removeButton.addEventListener('click', () => {
-    deleteTasks()
-    removeHtmlList()
-  });
+  createCount();
 };
 
 
-
-window.onload = function(){
-  const tasks = getTasksStorage();
-  const form = document.getElementById('form');
-  form.addEventListener('submit', createNewTask)
-
-
-  tasks.forEach((x) =>{ 
-    createTask(x)
-  }) 
-
-  removeTask();
-}
+// Inicializa
+window.onload = () => {
+  document.getElementById("form").addEventListener("submit", createNewTask);
+  document.getElementById("remove").addEventListener("click", deleteTasks);
+  renderAllTasks();
+};

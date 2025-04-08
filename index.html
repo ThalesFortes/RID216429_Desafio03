@@ -27,32 +27,27 @@
 
 
         <div id="list">
-          <ul id="listContents">
-              <!--
-            <li class="listLine">
-              <div class="listText">
-                <p>Implementar tela de listagem de tarefas</p>
-                <span class="tag">frontend</span>
-                <span>Criado em: 21/08/2024</span>
-              </div>
-              <button class="button">Concluir</button>
-            </li>
-            <li class="listLine">
-              <div class="listText" id="complete">
-                <p>Implementar protótipo da listagem de tarefas</p>
-                <span class="tag">UX</span>
-                <span>Criado em: 21/08/2024</span>
-              </div>
-              <div id="check">
-                <img src="./assets/checkIcon.png" alt="Icone de concluido" id="checkImg">
-              </div>
-            </li>
-              -->
-          </ul>  
+          <h2>pendent</h2>
+          <ul id="listPendents" 
+              class="task-list" 
+              ondragover="event.preventDefault()" 
+              ondrop="handleDrop(event, false)">
+          </ul>
+          <h2>Complet</h2>
+          <ul id="listConcludes" 
+              class="task-list" 
+              ondragover="event.preventDefault()" 
+              ondrop="handleDrop(event, true)">
+          </ul>
         </div>
+        
+        <div id="count">
         <div>
           <button id="remove">Remove Tasks Complet </button>
         </div>
+        <div id="counterAndRemove"></div>
+        </div>
+   
         <!-- <div id="count"> 1 tarefa concluida</div>   -->
       
 
