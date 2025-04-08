@@ -50,6 +50,19 @@ h1{
   font-family: var(--font-primary)
 }
 
+h2{
+  font-size: 2rem;
+  text-align: center;
+  color: #11175E;
+  font-family: var(--font-primary)
+}
+
+.subtitle{
+  border-bottom: 1px solid var(--border-color);
+  border-top: 1px solid var(--border-color);
+  padding: 1rem;
+}
+
 #app{
   height: 100%;
   display: flex;
@@ -147,10 +160,18 @@ h1{
   width: 4rem;
 }
 
+#remove.button{
+  background-color: rgb(192, 73, 73);
+}
 
 #count{
   display: flex;
   justify-content: space-between;
+  align-items: center;
   color: #B1BACB;
   font-weight: 400;
+}
+
+#counterAndRemove span {
+  font-size: 1.3rem;
 }

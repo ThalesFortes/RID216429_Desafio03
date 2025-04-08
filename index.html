@@ -8,6 +8,7 @@
   <title>ToDo List</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./css/style.css"/>
+  <link rel="stylesheet" href="./css/tablet.css"/>
   <link rel="stylesheet" href="./css/mobile.css"/>
   <script src="./js/script.js" defer></script>
 </head>
@@ -23,35 +24,26 @@
             <button type="submit" class="button">+</button>
           </form>
         </div>
-
-
-
         <div id="list">
-          <h2>pendent</h2>
+          <h2 class="subtitle">Tarefas Pendentes</h2>
           <ul id="listPendents" 
               class="task-list" 
               ondragover="event.preventDefault()" 
               ondrop="handleDrop(event, false)">
           </ul>
-          <h2>Complet</h2>
+          <h2 class="subtitle">Tarefas Concluidas</h2>
           <ul id="listConcludes" 
               class="task-list" 
               ondragover="event.preventDefault()" 
               ondrop="handleDrop(event, true)">
           </ul>
         </div>
-        
         <div id="count">
         <div>
-          <button id="remove">Remove Tasks Complet </button>
+          <button id="remove" class="button">Remove Tasks Complet </button>
         </div>
         <div id="counterAndRemove"></div>
         </div>
-   
-        <!-- <div id="count"> 1 tarefa concluida</div>   -->
-      
-
-
       </div>
     </div>
   </main>
