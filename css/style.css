@@ -42,11 +42,11 @@ h1{
   border-radius: 16px;
 }
 
-#form{
+#contentForm{
   margin: 2rem 0;
 }
 
-#form :first-child , #form :nth-child(2){
+#contentForm :first-child , #form :nth-child(2){
   margin-right: .5rem;
 }
 

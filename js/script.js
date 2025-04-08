@@ -1,7 +1,22 @@
-const getTasksStorage = () =>{
-  const localTasks = JSON.parse(window.localStorage.getItem('tasks'))
-  return localTasks ? localTasks : []
+const tasks = []
+const getTasksStorage = () => {
+  if (localStorage.getItem('tasks') === "undefined") {
+    localStorage.removeItem('tasks');
+  }
+
+  const item = window.localStorage.getItem('tasks');
+  if (!item || item === "undefined") {
+    return [];
+  }
+  
+  try {
+    return JSON.parse(item);
+  } catch (e) {
+    console.error("Erro ao fazer parse do localStorage:", e);
+    return [];
+  }
 }
+
 
 const setTasksInLocalStorage = (tasks) =>{
   window.localStorage.setItem('tasks',JSON.stringify(tasks))
@@ -56,9 +71,7 @@ const createButtonConclude = (taskID) => {
   return button
 }
 
-const createTask = () =>{
-  const tasks = getTasksStorage();
-  
+const createTask = (tasks) =>{
   const taskList = document.getElementById('listContents')
   const wrapper = document.createElement('li')
   wrapper.className ='listLine'
@@ -120,12 +133,13 @@ const createNewTask = (event) =>{
    createTask(newTask)
 }
 
+
 const removeTask = () => {
-  const ta = document.getElementById('remove');
-  ta.addEventListener('click', () => {
-    setTasksInLocalStorage([]); // limpa o localStorage
+  const removeButton = document.getElementById('remove');
+  removeButton.addEventListener('click', () => {
+    setTasksInLocalStorage([]); 
     const taskList = document.getElementById('listContents');
-    taskList.innerHTML = ''; // remove todos os elementos da lista no DOM
+    taskList.innerHTML = ''; 
     console.log('CLIQUE');
   });
 };
@@ -134,6 +148,7 @@ const removeTask = () => {
 
 window.onload = function(){
   const tasks = getTasksStorage();
+  const form = document.getElementById('form');
   form.addEventListener('submit', createNewTask)
 
 
