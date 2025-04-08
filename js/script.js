@@ -122,9 +122,12 @@ const newTaskId = () => {
 const createNewTask = (event) => {
   event.preventDefault();
 
+  const taskInput =  event.target.task;
+  const tagInput = event.target.taskTag;
+
   const id = newTaskId();
-  const task = event.target.task.value;
-  const tag = event.target.taskTag.value;
+  const task = taskInput.value
+  const tag = tagInput.value
   const date = new Date().toLocaleString('pt-BR');
   const conclude = false;
 
@@ -134,9 +137,15 @@ const createNewTask = (event) => {
   tasks.push(newTask);
   setTasksInLocalStorage(tasks);
   renderAllTasks();
-  event.target.task.value = ""
-  event.target.taskTag.value = ""
+  clearInputs(taskInput,tagInput);
 };
+
+
+//Limpa os inputs
+const clearInputs = (...inputs) => {
+  inputs.forEach(input => input.value = "");
+};
+
 
 // Remove apenas as tarefas concluídas
 const deleteTasks = () => {
