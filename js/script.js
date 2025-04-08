@@ -133,8 +133,9 @@ const createNewTask = (event) => {
   const tasks = getTasksStorage();
   tasks.push(newTask);
   setTasksInLocalStorage(tasks);
-
   renderAllTasks();
+  event.target.task.value = ""
+  event.target.taskTag.value = ""
 };
 
 // Remove apenas as tarefas concluídas
@@ -185,3 +186,5 @@ window.onload = () => {
   document.getElementById("remove").addEventListener("click", deleteTasks);
   renderAllTasks();
 };
+
+
