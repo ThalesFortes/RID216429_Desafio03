@@ -18,7 +18,7 @@
 
 
 <p align="center">
-     <a href="https://thalesfortes.github.io/ToDo-List/">📱 Visit this Project</a>
+     <a href="https://thalesfortes.github.io/ToDoList_dragAndDrop/">📱 Visit this Project</a>
 </p>
 
 <h2 id="layout">🎨 Layout</h2>
