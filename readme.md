@@ -1,26 +1,39 @@
-# TODO-LIST COM DRAG OPERATIONS
+<h1 align="center" style="font-weight: bold;">ToDo List com DragOperations💻</h1>
 
-- ToDo-list Responsivo uma aplicação em HTML, CSS e JavaScript que cria,apaga,marca como concluida todas as tarefas e a salvam no local storage
-- ler e cria a lista, altera estado e deleta com um CRUD
-- Utiliza Promisse para simular salvamento no banco de dados
-- Refatorado para separa funcionalidades
-- Função de dragon and dragdrop para mudar tarefas de lista concluida para pendente
+<p align="center">
+ <a href="#tech">Technologies</a> • 
+ <a href="#started">Getting Started</a> • 
+</p>
 
-## Utilizado
+<p align="center">
+    <b>
+      Responsive ToDo-list an application in HTML, CSS and JavaScript that creates, deletes, marks as completed all tasks and saves them in the local storage
+      Reads and creates the list, changes the state and deletes with a CRUD
+      Uses Promises to simulate saving in the database
+      Refactored to separate functionalities
+      Dragon and dragdrop function to change tasks from completed to pending list
+      Semantic Tags, Measurement units such as rem, % and (vh, vw), JavaScript using array of objects, promises, asynchronous and synchronous functions, local storage, Map, Filter, constants, variables, eventlisteners
+    </b>
+</p>
 
-- Tags Semânticas
-- Unidades de medidas como rem, % e (vh , vw)
-- JavaScript utilizando array de objetos, promisses, funções assincronas e sincronas, armazenamento em local storage
-- Map, Filter, constantes, variaveis, eventlisteners
 
+<p align="center">
+     <a href="https://thalesfortes.github.io/ToDo-List/">📱 Visit this Project</a>
+</p>
 
-## Visualização
+<h2 id="layout">🎨 Layout</h2>
 
-- Basta baixar e clicar no index ou acessar o site
- 
-## Tecnologias
+<p align="center">
+      <img src="./img/image.png" alt="Imagem da pagina demonstrando como ela e" width="400px">
+</p>
+
+<h2 id="technologies">💻 Technologies</h2>
 
 - HTML5
 - CSS3
 - JavaScript
+
+<h2 id="started">🚀 Getting started</h2>
+
+- Just download the project with its assets and run it with liveserve or just by opening the html document
 
